@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Validation</title>
+  <style>
+    .error {
+      color: red;
+      font-size: 12px;
+    }
+    .invalid {
+      border-color: red;
+    }
+    .valid {
+      border-color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>Form Validasi</h1>
+  <form id="form">
+    <div>
+      <label for="name">Nama Pelanggan (max 30 karakter):</label><br>
+      <input type="text" id="name" name="name" maxlength="30">
+      <span class="error" id="nameError"></span>
+    </div>
+    <br>
+    <div>
+      <label for="email">Email:</label><br>
+      <input type="email" id="email" name="email">
+      <span class="error" id="emailError"></span>
+    </div>
+    <br>
+    <div>
+      <label for="time">Jam Keberangkatan (format 00.00 - 23.59):</label><br>
+      <input type="text" id="time" name="time" placeholder="00.00">
+      <span class="error" id="timeError"></span>
+    </div>
+    <br>
+    <div>
+      <label for="destination">Tujuan Keberangkatan:</label><br>
+      <input type="text" id="destination" name="destination">
+      <span class="error" id="destinationError"></span>
+    </div>
+    <br>
+    <div>
+      <label for="tickets">Jumlah Tiket (1-10):</label><br>
+      <input type="number" id="tickets" name="tickets" min="1" max="10">
+      <span class="error" id="ticketsError"></span>
+    </div>
+    <br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <h2>Hasil Validasi</h2>
+  <div id="result"></div>
+
+  <script>
+    document.getElementById("form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      let isValid = true;
+      let result = document.getElementById("result");
+      result.innerHTML = "";
+
+      // Nama Validasi
+      let name = document.getElementById("name");
+      let nameError = document.getElementById("nameError");
+      if (name.value.trim() === "" || name.value.length > 30) {
+        nameError.textContent = "Nama harus diisi dan maksimal 30 karakter.";
+        name.classList.add("invalid");
+        isValid = false;
+      } else {
+        nameError.textContent = "";
+        name.classList.remove("invalid");
+        name.classList.add("valid");
+      }
+
+      // Email Validasi
+      let email = document.getElementById("email");
+      let emailError = document.getElementById("emailError");
+      let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email.value)) {
+        emailError.textContent = "Masukkan email yang valid.";
+        email.classList.add("invalid");
+        isValid = false;
+      } else {
+        emailError.textContent = "";
+        email.classList.remove("invalid");
+        email.classList.add("valid");
+      }
+
+      // Jam Keberangkatan Validasi
+      let time = document.getElementById("time");
+      let timeError = document.getElementById("timeError");
+      let timePattern = /^([01]\d|2[0-3])\.[0-5]\d$/;
+      if (!timePattern.test(time.value)) {
+        timeError.textContent = "Masukkan jam dalam format 00.00 - 23.59.";
+        time.classList.add("invalid");
+        isValid = false;
+      } else {
+        timeError.textContent = "";
+        time.classList.remove("invalid");
+        time.classList.add("valid");
+      }
+
+      // Tujuan Validasi
+      let destination = document.getElementById("destination");
+      let destinationError = document.getElementById("destinationError");
+      if (destination.value.trim() === "") {
+        destinationError.textContent = "Tujuan harus diisi.";
+        destination.classList.add("invalid");
+        isValid = false;
+      } else {
+        destinationError.textContent = "";
+        destination.classList.remove("invalid");
+        destination.classList.add("valid");
+      }
+
+      // Jumlah Tiket Validasi
+      let tickets = document.getElementById("tickets");
+      let ticketsError = document.getElementById("ticketsError");
+      if (tickets.value < 1 || tickets.value > 10 || tickets.value === "") {
+        ticketsError.textContent = "Jumlah tiket harus antara 1 dan 10.";
+        tickets.classList.add("invalid");
+        isValid = false;
+      } else {
+        ticketsError.textContent = "";
+        tickets.classList.remove("invalid");
+        tickets.classList.add("valid");
+      }
+
+      // Menampilkan hasil jika valid
+      if (isValid) {
+        result.innerHTML = `
+          <p>Nama Pelanggan: ${name.value}</p>
+          <p>Email: ${email.value}</p>
+          <p>Jam Keberangkatan: ${time.value}</p>
+          <p>Tujuan Keberangkatan: ${destination.value}</p>
+          <p>Jumlah Tiket: ${tickets.value}</p>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>
